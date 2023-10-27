@@ -1,0 +1,58 @@
+class BusBooking:
+    global A,W,WL,Id,g
+    A = 1
+    W = 1
+    WL = 1
+    Id = 1 
+    g = []
+    def _init_(self):
+        print(g)
+    def book(self, n , p = 'a'):
+        global A,W,WL,Id
+        self.name = n
+        self.preference = p
+        self.id = Id
+        Id = Id +1
+        if W> 20 and A> 20:
+            self.outcome = 'WL-' + str(WL)
+            WL = WL + 1
+        elif (p in [ 'w','W','window','Window'] or A==21) and W <21:
+            self.outcome = 'W' + str(W)
+            W= W + 1
+        elif A <21:
+            self.outcome = 'A' + str(A)
+            A= A + 1
+        g.append([self.id , self.name , self.outcome])
+        return (self.id , self.name , self.outcome)
+    
+    def status(self , i_d):
+        for i in g:
+            if i[0] == i_d :
+                return( i[1],i[2])
+    def _str_(self):
+        
+            
+        return str(g)
+    
+    def cancel(self,i_d):
+        for i in g:
+            if i[0] == i_d :
+                if i[2][:2] == 'WL':
+                    for j in g[40:]:
+                        if int(j[2][3:])>int(i[2][3:]):
+                            j[2] = 'WL-' + str(int(j[2][3:])-1) 
+                    g.remove(i)
+                    return True
+                elif i[2][:1] == 'W':
+                    return self.shift(i)
+                elif i[2][:1] == 'A':
+                    return self.shift(i)
+        return False           
+    def shift(self, i):
+        if len(g)>40:
+            g[40][2] = i[2]
+            for j in g:
+                if j[2][:2] == 'WL':
+                      j[2] ='WL-' + str(int(j[2][3:])-1) 
+        g.remove(i)
+        return True
